@@ -7,17 +7,20 @@ def main(dataTr, dataTs, n_clusters):
     train = np.loadtxt(dataTr)
     test = np.loadtxt(dataTs)
     
+    """Your dataset structure must be the same as in the repository"""
     y_test = test[:,132]
     X_test = test[:, 1 : 132]
 
     y_train = train[:,132]
     X_train = train[:, 1 : 132]
 
+    """Normalizing the data"""
     from sklearn.preprocessing import StandardScaler
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.fit_transform(X_test)
 
+    """Splitting the dataset by classes"""
     X_classes_arr = np.array_split(X_train, 10)
     y_classes_arr = np.array_split(y_train, 10)
 
@@ -26,6 +29,7 @@ def main(dataTr, dataTs, n_clusters):
     
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
 
+    """Clustering each class and formatting the new dataset of centes from each class"""
     for _class, _label in zip(X_classes_arr, y_classes_arr):
         kmeans.fit(_class)
         
@@ -38,13 +42,14 @@ def main(dataTr, dataTs, n_clusters):
 
     knn = KNeighborsClassifier(n_neighbors=3, metric='euclidean')
 
+    """Getting the accuracy by using all the training data"""
     knn.fit(X_train, y_train)
     
     print(f"------------------{knn}------------------")
     print(f"\n - No clustering training dataset (default) accuracy: {metrics.accuracy_score(y_test, knn.predict(X_test))}\n") 
     print("-------------------------------------------------------------------------------------------")
     
-
+    """Getting the accuracy by using the training data clustered by K-means"""
     knn.fit(X_centers, y_centers)
     predicted = knn.predict(X_test)
     
