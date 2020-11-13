@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Clustering training dataset with K-means and accuracy comparison.
+@author: mathbatistela
+"""
+
 import numpy as np
 import sys
 from sklearn.cluster import KMeans
@@ -29,7 +36,7 @@ def main(dataTr, dataTs, n_clusters):
     
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
 
-    """Clustering each class and formatting the new dataset of centes from each class"""
+    """Clustering each class and formatting the new dataset of centers from each class"""
     for _class, _label in zip(X_classes_arr, y_classes_arr):
         kmeans.fit(_class)
         
@@ -53,7 +60,7 @@ def main(dataTr, dataTs, n_clusters):
     knn.fit(X_centers, y_centers)
     predicted = knn.predict(X_test)
     
-    print(f"\n - Clustering training dataset with K-means: {metrics.accuracy_score(y_test, predicted)}\n")
+    print(f"\n - Clustering training dataset with K-means accuracy: {metrics.accuracy_score(y_test, predicted)}\n")
     print(metrics.classification_report(y_test, predicted))
     
     import matplotlib.pyplot as plt
